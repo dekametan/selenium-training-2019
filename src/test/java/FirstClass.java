@@ -24,25 +24,30 @@ public class FirstClass extends TestBase {
         System.out.println("Menu items number: " + menuItems);
 
         for (int i = 0; i < menuItems; i++) {
-            System.out.println("Menu item -> " + i);
             WebElement menuItem = driver.findElements(By.className("app")).get(i);
             menuItem.click();
             menuItem = driver.findElements(By.className("app")).get(i);
-            List <WebElement> subItems = menuItem.findElements(By.cssSelector("li.doc"));
-            System.out.println("Menu subitems number: " + subItems.size());
-            System.out.println("---------------------------");
-            for (int j = 0; j < subItems.size(); j++) {
-                menuItem = driver.findElements(By.className("app")).get(i);
-                subItems = menuItem.findElements(By.cssSelector("li.doc"));
-                System.out.println("Menu subitem -> " + j);
-                WebElement subItem = subItems.get(j);
-                subItem.click();
+            List <WebElement> subMenuItems = menuItem.findElements(By.cssSelector("li.doc"));
+            if (subMenuItems.size() == 0) {
                 try {
                     driver.findElement(By.cssSelector("div.panel-heading"));
-                    System.out.println(String.format("Header is present for %s and subitem %s", i, j));
-                    System.out.println("---------");
-                } catch (NoSuchElementException e) {
-                    throw new NoSuchElementException(String.format("Header is not present for %s and subitem %s", i, j));
+                    System.out.println(String.format("Header is present for menu item #%s (It hasn't sub-menu items)", i));
+                } catch (org.openqa.selenium.NoSuchElementException e) {
+                    throw new NoSuchElementException(String.format("Header is not present for menu item #%s", i));
+                }
+            }
+            else {
+                for (int j = 0; j < subMenuItems.size(); j++) {
+                    menuItem = driver.findElements(By.className("app")).get(i);
+                    subMenuItems = menuItem.findElements(By.cssSelector("li.doc"));
+                    WebElement subItem = subMenuItems.get(j);
+                    subItem.click();
+                    try {
+                        driver.findElement(By.cssSelector("div.panel-heading"));
+                        System.out.println(String.format("Header is present for menu item #%s and sub-menu item #%s", i, j));
+                    } catch (org.openqa.selenium.NoSuchElementException e) {
+                        throw new NoSuchElementException(String.format("Header is not present for menu item #%s and sub-menu item #%s", i, j));
+                    }
                 }
             }
         }
