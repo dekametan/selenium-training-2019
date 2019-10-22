@@ -42,7 +42,7 @@ public class FirstClass extends TestBase {
                     System.out.println(String.format("Header is present for %s and subitem %s", i, j));
                     System.out.println("---------");
                 } catch (NoSuchElementException e) {
-                    throw new NoSuchElementException(String.format("No header is present for %s and subitem %s", i, j));
+                    throw new NoSuchElementException(String.format("Header is not present for %s and subitem %s", i, j));
                 }
             }
         }
